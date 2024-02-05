@@ -216,8 +216,14 @@ JOIN (
       JOIN Menu m2 ON m1.numero = m2.numero   
       WHERE m1.alimentId = 2     AND  m2.alimentId = 11     AND (m1.quantite / m2.quantite) <= 0.5 ) 
    subquery ON m.numero = subquery.numero 
-GROUP BY m.numero;"
-29	Donner l'âge et l'origine des animaux qui sont amis de l'homme.	"SELECT TIMESTAMPDIFF(YEAR, dateNaissance, NOW()) AS Age_Actuel, pays AS Pays_d_Origine 
+GROUP BY m.numero;
+
+_____________________________________________
+
+
+29	Donner l'âge et l'origine des animaux qui sont amis de l'homme.	
+
+SELECT TIMESTAMPDIFF(YEAR, dateNaissance, NOW()) AS Age_Actuel, pays AS Pays_d_Origine 
 FROM Animal 
 WHERE amis='Domestic'"
 30	Numéro de menu et quantité de viande pour les animaux qui ont une attitude amicale envers l'homme	"SELECT 
@@ -231,8 +237,13 @@ JOIN
 JOIN 
     Aliment al ON m.alimentId = al.id
 WHERE 
-    a.amis = 'Domestic' AND al.titre = 'Viande Fraiche';"
-31	Donner les noms des animaux qui sont grands parents.	"SELECT DISTINCT
+    a.amis = 'Domestic' AND al.titre = 'Viande Fraiche';
+
+    _____________________________________________
+    
+31	Donner les noms des animaux qui sont grands parents.	
+
+SELECT DISTINCT
     gp.nom AS Grandparent_Nom
 FROM 
     Animal gp
@@ -241,8 +252,13 @@ JOIN
 JOIN 
     Animal gc ON p.id = gc.mereId OR p.id = gc.pereId
 WHERE
-    gc.id IS NOT NULL;"
-32	32 -Quantité de viande totale pour tous les menus. 	"SELECT
+    gc.id IS NOT NULL;
+
+    _____________________________________________
+    
+32	32 -Quantité de viande totale pour tous les menus. 	
+
+SELECT
     a.nom AS Animal_Nom,
     e.titre AS ESPECE,
     al.titre AS Aliment,
@@ -274,8 +290,13 @@ FROM
 JOIN
     Aliment al ON al.id = m.alimentId
 WHERE
-    al.titre = 'Viande Fraiche';"
-33	Nombre d'enfants pour chaque numéro d'animal.	"SELECT 
+    al.titre = 'Viande Fraiche';
+
+    _____________________________________________
+    
+33	Nombre d'enfants pour chaque numéro d'animal.	
+
+SELECT 
     p.nom AS Parent_Name,
     COUNT(e.id) AS Numero_d_Enfant
 FROM 
@@ -283,17 +304,33 @@ FROM
 LEFT JOIN 
     Animal e ON p.id = e.mereId OR p.id = e.pereId
 GROUP BY 
-    p.id;"
-34	Lister les animaux qui dont on connaît les deux parents. 	SELECT a.nom, e.titre FROM Animal a JOIN Espece e ON e.id = a.especeID WHERE (a.mereId IS NOT NULL) AND (a.pereId IS NOT NULL);
-35	Donner la moyenne de la quantité de viande servie dans les menus.	"SELECT 
+    p.id;
+
+    _____________________________________________
+    
+34	Lister les animaux qui dont on connaît les deux parents. 	
+SELECT a.nom, e.titre FROM Animal a 
+JOIN Espece e ON e.id = a.especeId 
+WHERE (a.mereId IS NOT NULL) AND (a.pereId IS NOT NULL);
+
+_____________________________________________
+
+35	Donner la moyenne de la quantité de viande servie dans les menus.	
+
+SELECT 
     AVG(m.quantite) AS Quantite_Moyenne
 FROM 
     Menu m
 JOIN 
     Aliment al ON m.alimentId = al.id
 WHERE 
-    al.titre IN ('Viande Fraiche', 'Poisson');"
-36	Donner les numéros et la composition des menus plus riches en viande que la moyenne (se servir de la requête précédente pour faire cette requête). 	"SELECT 
+    al.titre IN ('Viande Fraiche', 'Poisson');
+
+    _____________________________________________
+    
+36	Donner les numéros et la composition des menus plus riches en viande que la moyenne (se servir de la requête précédente pour faire cette requête). 	
+
+SELECT 
     m.numero AS Numero_de_Menu,
     GROUP_CONCAT(DISTINCT al.titre ORDER BY al.titre SEPARATOR ', ') AS Composition_du_Menu,
     AVG(m.quantite) AS Quantite_Moyenne_de_Viande
@@ -315,6 +352,7 @@ HAVING
             Aliment al2 ON m2.alimentId = al2.id
         WHERE 
             al2.titre IN ('Viande Fraiche', 'Poisson')
-    );"
-![image](https://github.com/woldemarUA/brigitte_bdd/assets/3956891/5ded7a6b-16a6-480a-82d7-672e6fc56418)
+    );
+
+    _____________________________________________
 
