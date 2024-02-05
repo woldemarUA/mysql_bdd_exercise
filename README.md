@@ -36,70 +36,118 @@ SELECT e.nom, v.titre
 FROM Employe e
  JOIN Ville v ON v.id = e.villeId 
 JOIN Role r ON r.id = e.roleId 
-WHERE v.titre = 'Ushuaia' AND r.titre = 'Soigneur'";
+WHERE v.titre = 'Ushuaia' AND r.titre = 'Soigneur';
 _____________________________________________
-9	La fonctionnalité et le nom du soigneur des cages gardées par un employé habitant Calvi. 	"SELECT e.nom AS Employe_Nom , c.fonctionalite AS Cage_Fonc 
+9	La fonctionnalité et le nom du soigneur des cages gardées par un employé habitant Calvi. 	
+SELECT e.nom AS Employe_Nom , c.fonctionalite AS Cage_Fonc 
 FROM Employe e 
 JOIN Cage c ON c.soigneurId = e.id 
 JOIN Ville v ON v.id = e.villeId 
-WHERE v.titre = 'Calvi'"
-10	Le nom des animaux ainsi que des employés qui en sont soit les soigneurs soit les responsables. 	SELECT a.nom AS Animal_Nom, soign.nom AS Soigneur_Nom, resp.nom AS Responsable_Nom FROM Animal a JOIN Employe soign ON soign.id = a.soigneurId JOIN Employe resp ON resp.id = a.responsableId;
-11	Le nom des soigneurs gardant tous les animaux.	SELECT e.nom  FROM Employe e JOIN Role r ON r.id = e.roleId WHERE r.titre = 'Soigneur'
-12	Les noms et types des animaux qui n’ont jamais été malades. 	" SELECT a.nom AS Animal_Nom, e.titre AS Espece  
+WHERE v.titre = 'Calvi';
+_____________________________________________
+10	Le nom des animaux ainsi que des employés qui en sont soit les soigneurs soit les responsables. 	
+SELECT a.nom AS Animal_Nom, soign.nom AS Soigneur_Nom, resp.nom AS Responsable_Nom 
+FROM Animal a JOIN Employe soign ON soign.id = a.soigneurId 
+JOIN Employe resp ON resp.id = a.responsableId;
+
+_____________________________________________
+
+11	Le nom des soigneurs gardant tous les animaux.	
+SELECT e.nom  
+FROM Employe e 
+JOIN Role r ON r.id = e.roleId WHERE r.titre = 'Soigneur';
+
+12	Les noms et types des animaux qui n’ont jamais été malades. 	
+SELECT a.nom AS Animal_Nom, e.titre AS Espece  
 FROM Animal a 
 JOIN Espece e ON e.id=a.especeId 
 JOIN CarnetSante cs ON cs.id =
 a.carnetSanteId 
 LEFT JOIN CarnetMaladie cm ON cm.carnetId = cs.id 
 LEFT JOIN Maladie m ON m.id = cm.maladieId 
-WHERE m.nom IS NULL;"
-13	Les noms des animaux originaires du Kenya ayant déjà contractés une grippe	"SELECT a.nom AS Animal_Nom 
+WHERE m.nom IS NULL;
+_____________________________________________
+
+13	Les noms des animaux originaires du Kenya ayant déjà contractés une grippe	
+SELECT a.nom AS Animal_Nom 
 FROM Animal a 
 JOIN CarnetSante cs ON cs.id = a.carnetSanteId 
 JOIN CarnetMaladie cm ON cm.carnetId = cs.id 
 JOIN Maladie m ON m.id = cm.maladieId 
-WHERE m.nom='Grippe'"
-14	Les numéros et fonctionnalités des cages qui sont inoccupées. 	"SELECT c.numero AS Cage_Numero, c.fonctionalite AS Cage_Fonctionalite 
+WHERE m.nom='Grippe';
+_____________________________________________
+
+14	Les numéros et fonctionnalités des cages qui sont inoccupées. 	
+SELECT c.numero AS Cage_Numero, c.fonctionalite AS Cage_Fonctionalite 
 FROM Animal a  
 RIGHT JOIN Cage c  ON a.cageId = c.id 
-WHERE a.id IS NULL;"
-15	Donner pour chaque animal mâle l’ensemble des maladies qu’il a contractées (ensemble des couples nom d’animal, nom de maladie). 	"SELECT a.nom AS Animal_Nom, m.nom AS Maladie_Nom 
+WHERE a.id IS NULL;
+_____________________________________________
+
+15	Donner pour chaque animal mâle l’ensemble des maladies qu’il a contractées (ensemble des couples nom d’animal, nom de maladie). 	
+SELECT a.nom AS Animal_Nom, m.nom AS Maladie_Nom 
 FROM Animal a 
 JOIN CarnetSante cs ON cs.id = a.carnetSanteid
 JOIN CarnetMaladie cm ON cm.carnetId = cs.id
 JOIN Maladie m ON m.id = cm.maladieId
- JOIN Sexe s ON s.id=a.sexeId WHERE s.titre ='male'"
-16	Les numéros et fonctionnalités des cages qui sont partagées par des animaux de types différents. En d’autres termes, ce sont les cages qui contiennent au moins deux animaux de types différents. 	"SELECT c.numero AS Cage_Numero, c.fonctionalite as Cage_Fonctionalite 
+ JOIN Sexe s ON s.id=a.sexeId WHERE s.titre ='male';
+ _____________________________________________
+ 
+16	Les numéros et fonctionnalités des cages qui sont partagées par des animaux de types différents. En d’autres termes, ce sont les cages qui contiennent au moins deux animaux de types différents. 	SELECT c.numero AS Cage_Numero, c.fonctionalite as Cage_Fonctionalite 
 FROM Animal a 
 JOIN Cage c ON c.id =a.cageId 
 GROUP BY cageId 
-HAVING COUNT(*)>1"
+HAVING COUNT(*)>1;
+_____________________________________________
+
 17	Les noms des responsables et les noms des soigneurs de Charly. 	"SELECT a.nom AS Animal_Nom, soign.nom AS Soigneur_Nom, resp.nom AS Responsable_Nom 
 FROM Animal a 
 JOIN Employe soign ON soign.id = a.soigneurId 
 JOIN Employe resp ON resp.id = a.responsableId 
-WHERE a.nom='Charly'"
-18	Le nom et le pays d’origine de l’animal doyen du refuge (il peut y en avoir plusieurs).	"SELECT nom, TIMESTAMPDIFF(YEAR, dateNaissance, CURRENT_DATE()) AS Age_Actuel 
+WHERE a.nom='Charly';
+_____________________________________________
+
+18	Le nom et le pays d’origine de l’animal doyen du refuge (il peut y en avoir plusieurs).	
+
+SELECT nom, TIMESTAMPDIFF(YEAR, dateNaissance, CURRENT_DATE()) AS Age_Actuel 
 FROM Animal 
-WHERE  TIMESTAMPDIFF(YEAR, dateNaissance, CURRENT_DATE())>6"
+WHERE  TIMESTAMPDIFF(YEAR, dateNaissance, CURRENT_DATE())>6;
+_____________________________________________
+
 19	Le nom, le type et l’année de naissance des animaux qui ont contracté toutes les maladies (connues) du refuge	"SELECT a.nom AS Animal_Nom, e.titre AS Espece ,YEAR(a.dateNaissance) AS Annee_Naissance, m.nom, m.date 
 FROM Animal a 
 JOIN Espece e ON e.id = a.especeId 
 JOIN CarnetSante cs ON cs.id = a.carnetSanteId 
 JOIN CarnetMaladie cm ON cm.carnetid = cs.id 
-JOIN Maladie m ON m.id = cm.maladieId"
-20	Le nom, le type et le pays d’origine des animaux qui partagent la cage de Charly.	" SELECT a1.nom AS Animal1_Nom, a2.nom AS Animal2_Nom  
+JOIN Maladie m ON m.id = cm.maladieId;
+_____________________________________________
+
+20	Le nom, le type et le pays d’origine des animaux qui partagent la cage de Charly.	
+SELECT a1.nom AS Animal1_Nom, a2.nom AS Animal2_Nom  
 FROM Animal a1 
 JOIN Animal a2 ON a1.cageId = a2.cageId AND a1.id<a2.id 
-WHERE a1.nom='Charly' OR a2.nom='Charly'"
-21	Le nom et l’adresse des employés qui sont soigneurs d’animaux de tous types, on fait référence aux types des animaux du refuge.	"SELECT e.nom AS Employe_Nom, v.titre AS Employe_Addresse, es.titre AS Espece 
+WHERE a1.nom='Charly' OR a2.nom='Charly';
+
+_____________________________________________
+
+21	Le nom et l’adresse des employés qui sont soigneurs d’animaux de tous types, on fait référence aux types des animaux du refuge.	
+
+SELECT e.nom AS Employe_Nom, v.titre AS Employe_Addresse, es.titre AS Espece 
 FROM Animal a 
 JOIN Employe e ON e.id = a.soigneurId 
 JOIN Ville v ON v.id = e.villeId 
 JOIN Espece es ON es.id = a.especeId 
-ORDER BY e.nom"
-22	Lister le nom et l'âge de tous les animaux	SELECT nom AS Animal_Nom, TIMESTAMPDIFF(YEAR, dateNaissance, NOW()) AS Age_Actuel FROM Animal
-23	Donner les caractéristiques de l'animal appelé HECTOR 	"SELECT 
+ORDER BY e.nom;
+
+_____________________________________________
+
+22	Lister le nom et l'âge de tous les animaux	
+SELECT nom AS Animal_Nom, TIMESTAMPDIFF(YEAR, dateNaissance, NOW()) AS Age_Actuel FROM Animal;
+
+_____________________________________________
+
+23	Donner les caractéristiques de l'animal appelé HECTOR 	
+SELECT 
     a.nom AS Animal_Nom, 
     e.titre AS Espece, 
     sexe.titre AS Sexe, 
@@ -125,18 +173,42 @@ LEFT JOIN Animal mere ON mere.id = a.mereId
 LEFT JOIN Animal pere ON pere.id = a.pereId
 WHERE a.nom='Hector'
 GROUP BY a.nom, e.titre, sexe.id, a.dateNaissance, a.dateArivee, c.numero, c.fonctionalite, soign.nom, resp.nom, mere.nom, pere.nom
-\G;"
-24	Donner les origines distinctes de toutes les familles. 	SELECT DISTINCT pays AS Pays_d_Origine FROM Animal
-25	Donner les noms des singes de plus de 10 ans et originaire d'Afrique. 	SELECT a.nom FROM Animal a JOIN Ordre o ON o.id = a.ordreId WHERE o.titre='Primates' AND TIMESTAMPDIFF(YEAR, a.dateNaissance, NOW())>10 AND a.continent='Afrique'
-26	Donner les noms des singes ainsi que des animaux de plus de 8 ans	"SELECT nom 
+\G;
+_____________________________________________
+
+24	Donner les origines distinctes de toutes les familles. 	
+
+SELECT DISTINCT pays AS Pays_d_Origine FROM Animal;
+
+_____________________________________________
+
+25	Donner les noms des singes de plus de 10 ans et originaire d'Afrique. 	
+
+SELECT a.nom FROM Animal a 
+JOIN Ordre o ON o.id = a.ordreId 
+WHERE o.titre='Primates' AND TIMESTAMPDIFF(YEAR, a.dateNaissance, NOW())>10 AND a.continent='Afrique';
+
+_____________________________________________
+26	Donner les noms des singes ainsi que des animaux de plus de 8 ans	
+
+SELECT nom 
 FROM Animal 
-WHERE ordreId = (SELECT id FROM Ordre WHERE titre='Primates') OR TIMESTAMPDIFF(YEAR, dateNaissance, NOW())>8"
-27	Donner les races des animaux dont le numéro de menu est 1 et l'âge est supérieur à 10. 	" SELECT e.titre  
+WHERE ordreId = (SELECT id FROM Ordre WHERE titre='Primates') OR TIMESTAMPDIFF(YEAR, dateNaissance, NOW())>8;
+
+_____________________________________________
+
+27	Donner les races des animaux dont le numéro de menu est 1 et l'âge est supérieur à 10. 	
+
+SELECT e.titre  
 FROM Animal a 
 JOIN Espece e ON e.id = a.especeId 
 JOIN Menu m ON m.animalId = a.id 
-WHERE TIMESTAMPDIFF(YEAR, a.dateNaissance, NOW())>10 AND m.numero=1"
-28	Donner les menus plus 2 fois moins riches en viande qu'en légume?	"SELECT m.numero, GROUP_CONCAT(DISTINCT m.alimentId) AS AlimentIds 
+WHERE TIMESTAMPDIFF(YEAR, a.dateNaissance, NOW())>10 AND m.numero=1;
+
+_____________________________________________
+
+28	Donner les menus plus 2 fois moins riches en viande qu'en légume?	
+SELECT m.numero, GROUP_CONCAT(DISTINCT m.alimentId) AS AlimentIds 
 FROM Menu m 
 JOIN (   
       SELECT DISTINCT m1.numero   
